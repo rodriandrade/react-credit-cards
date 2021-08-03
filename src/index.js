@@ -147,12 +147,14 @@ class ReactCreditCards extends React.Component {
 
     if (issuer === 'amex') {
       maxLength = 15;
-    }
-    else if (issuer === 'dinersclub') {
+    } else if (issuer === 'dinersclub') {
       maxLength = 14;
-    }
-    else if (['hipercard', 'mastercard', 'visa'].includes(issuer)) {
+    } else if(issuer === 'mastercard' && number === '5535'){
+      issuer = 'dinersclub'
+    }else if (['hipercard', 'mastercard', 'visa'].indexOf(issuer) !== -1) {
       maxLength = 19;
+    } else if(issuer === 'naranja'){
+      maxLength = 16;
     }
 
     return {

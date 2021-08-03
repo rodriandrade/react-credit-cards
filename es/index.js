@@ -8,7 +8,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
@@ -28,7 +28,7 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
@@ -75,19 +75,87 @@ var ReactCreditCards = /*#__PURE__*/function (_React$Component) {
       }
     }
   }, {
+    key: "setCards",
+    value: function setCards() {
+      var acceptedCards = this.props.acceptedCards;
+      var newCardArray = [];
+
+      if (acceptedCards.length) {
+        Payment.getCardArray().forEach(function (d) {
+          if (acceptedCards.indexOf(d.type) !== -1) {
+            newCardArray.push(d);
+          }
+        });
+      } else {
+        newCardArray = newCardArray.concat(Payment.getCardArray());
+      }
+
+      Payment.setCardArray(newCardArray);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props2 = this.props,
+          cvc = _this$props2.cvc,
+          focused = _this$props2.focused,
+          locale = _this$props2.locale,
+          name = _this$props2.name,
+          placeholders = _this$props2.placeholders;
+      var number = this.number,
+          expiry = this.expiry;
+      return /*#__PURE__*/React.createElement("div", {
+        key: "Cards",
+        className: "rccs"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: ['rccs__card', "rccs__card--".concat(this.issuer), focused === 'cvc' && this.issuer !== 'amex' ? 'rccs__card--flipped' : ''].join(' ').trim()
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "rccs__card--front"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "rccs__card__background"
+      }), /*#__PURE__*/React.createElement("div", {
+        className: "rccs__issuer"
+      }), /*#__PURE__*/React.createElement("div", {
+        className: ['rccs__cvc__front', focused === 'cvc' ? 'rccs--focused' : ''].join(' ').trim()
+      }, cvc), /*#__PURE__*/React.createElement("div", {
+        className: ['rccs__number', number.replace(/ /g, '').length > 16 ? 'rccs__number--large' : '', focused === 'number' ? 'rccs--focused' : '', number.substr(0, 1) !== '•' ? 'rccs--filled' : ''].join(' ').trim()
+      }, number), /*#__PURE__*/React.createElement("div", {
+        className: ['rccs__name', focused === 'name' ? 'rccs--focused' : '', name ? 'rccs--filled' : ''].join(' ').trim()
+      }, name || placeholders.name), /*#__PURE__*/React.createElement("div", {
+        className: ['rccs__expiry', focused === 'expiry' ? 'rccs--focused' : '', expiry.substr(0, 1) !== '•' ? 'rccs--filled' : ''].join(' ').trim()
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "rccs__expiry__valid"
+      }, locale.valid), /*#__PURE__*/React.createElement("div", {
+        className: "rccs__expiry__value"
+      }, expiry)), /*#__PURE__*/React.createElement("div", {
+        className: "rccs__chip"
+      })), /*#__PURE__*/React.createElement("div", {
+        className: "rccs__card--back"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "rccs__card__background"
+      }), /*#__PURE__*/React.createElement("div", {
+        className: "rccs__stripe"
+      }), /*#__PURE__*/React.createElement("div", {
+        className: "rccs__signature"
+      }), /*#__PURE__*/React.createElement("div", {
+        className: ['rccs__cvc', focused === 'cvc' ? 'rccs--focused' : ''].join(' ').trim()
+      }, cvc), /*#__PURE__*/React.createElement("div", {
+        className: "rccs__issuer"
+      }))));
+    }
+  }, {
     key: "issuer",
     get: function get() {
-      var _this$props2 = this.props,
-          issuer = _this$props2.issuer,
-          preview = _this$props2.preview;
+      var _this$props3 = this.props,
+          issuer = _this$props3.issuer,
+          preview = _this$props3.preview;
       return preview && issuer ? issuer.toLowerCase() : this.options.issuer;
     }
   }, {
     key: "number",
     get: function get() {
-      var _this$props3 = this.props,
-          number = _this$props3.number,
-          preview = _this$props3.preview;
+      var _this$props4 = this.props,
+          number = _this$props4.number,
+          preview = _this$props4.preview;
       var maxLength = preview ? 19 : this.options.maxLength;
       var nextNumber = typeof number === 'number' ? number.toString() : number.replace(/[A-Za-z]| /g, '');
 
@@ -170,82 +238,18 @@ var ReactCreditCards = /*#__PURE__*/function (_React$Component) {
         maxLength = 15;
       } else if (issuer === 'dinersclub') {
         maxLength = 14;
-      } else if (['hipercard', 'mastercard', 'visa'].indexOf(issuer) !== -1) {
+      } else if(issuer === 'mastercard' && number === '5535'){
+        issuer = 'dinersclub'
+      }else if (['hipercard', 'mastercard', 'visa'].indexOf(issuer) !== -1) {
         maxLength = 19;
+      } else if(issuer === 'naranja'){
+        maxLength = 16;
       }
 
       return {
         issuer: issuer,
         maxLength: maxLength
       };
-    }
-  }, {
-    key: "setCards",
-    value: function setCards() {
-      var acceptedCards = this.props.acceptedCards;
-      var newCardArray = [];
-
-      if (acceptedCards.length) {
-        Payment.getCardArray().forEach(function (d) {
-          if (acceptedCards.indexOf(d.type) !== -1) {
-            newCardArray.push(d);
-          }
-        });
-      } else {
-        newCardArray = newCardArray.concat(Payment.getCardArray());
-      }
-
-      Payment.setCardArray(newCardArray);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this$props4 = this.props,
-          cvc = _this$props4.cvc,
-          focused = _this$props4.focused,
-          locale = _this$props4.locale,
-          name = _this$props4.name,
-          placeholders = _this$props4.placeholders;
-      var number = this.number,
-          expiry = this.expiry;
-      return /*#__PURE__*/React.createElement("div", {
-        key: "Cards",
-        className: "rccs"
-      }, /*#__PURE__*/React.createElement("div", {
-        className: ['rccs__card', "rccs__card--".concat(this.issuer), focused === 'cvc' && this.issuer !== 'amex' ? 'rccs__card--flipped' : ''].join(' ').trim()
-      }, /*#__PURE__*/React.createElement("div", {
-        className: "rccs__card--front"
-      }, /*#__PURE__*/React.createElement("div", {
-        className: "rccs__card__background"
-      }), /*#__PURE__*/React.createElement("div", {
-        className: "rccs__issuer"
-      }), /*#__PURE__*/React.createElement("div", {
-        className: ['rccs__cvc__front', focused === 'cvc' ? 'rccs--focused' : ''].join(' ').trim()
-      }, cvc), /*#__PURE__*/React.createElement("div", {
-        className: ['rccs__number', number.replace(/ /g, '').length > 16 ? 'rccs__number--large' : '', focused === 'number' ? 'rccs--focused' : '', number.substr(0, 1) !== '•' ? 'rccs--filled' : ''].join(' ').trim()
-      }, number), /*#__PURE__*/React.createElement("div", {
-        className: ['rccs__name', focused === 'name' ? 'rccs--focused' : '', name ? 'rccs--filled' : ''].join(' ').trim()
-      }, name || placeholders.name), /*#__PURE__*/React.createElement("div", {
-        className: ['rccs__expiry', focused === 'expiry' ? 'rccs--focused' : '', expiry.substr(0, 1) !== '•' ? 'rccs--filled' : ''].join(' ').trim()
-      }, /*#__PURE__*/React.createElement("div", {
-        className: "rccs__expiry__valid"
-      }, locale.valid), /*#__PURE__*/React.createElement("div", {
-        className: "rccs__expiry__value"
-      }, expiry)), /*#__PURE__*/React.createElement("div", {
-        className: "rccs__chip"
-      })), /*#__PURE__*/React.createElement("div", {
-        className: "rccs__card--back"
-      }, /*#__PURE__*/React.createElement("div", {
-        className: "rccs__card__background"
-      }), /*#__PURE__*/React.createElement("div", {
-        className: "rccs__stripe"
-      }), /*#__PURE__*/React.createElement("div", {
-        className: "rccs__signature"
-      }), /*#__PURE__*/React.createElement("div", {
-        className: ['rccs__cvc', focused === 'cvc' ? 'rccs--focused' : ''].join(' ').trim()
-      }, cvc), /*#__PURE__*/React.createElement("div", {
-        className: "rccs__issuer"
-      }))));
     }
   }]);
 
