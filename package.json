@@ -40,7 +40,7 @@
     "prop-types": "^15.7.2"
   },
   "dependencies": {
-    "payment": "^2.3.0"
+    "payment": "github:rodriandrade/payment"
   },
   "devDependencies": {
     "@babel/cli": "^7.10.1",
